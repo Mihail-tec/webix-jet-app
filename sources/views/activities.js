@@ -82,7 +82,6 @@ export default class Activities extends JetView {
 						webix.confirm("Are you sure?").then(() => {
 							activities.remove(id);
 						});
-						return false;
 					}
 				},
 				on: {

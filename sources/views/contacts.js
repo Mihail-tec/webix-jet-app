@@ -80,26 +80,26 @@ export default class Contacts extends JetView {
 
 	init() {
 		this.list = this.$$("list");
+		this.infoTitle = this.$$("infoTitle");
+		this.infoMain = this.$$("infoMain");
 		contacts.waitData.then(() => {
 			this.list.parse(contacts);
 			const select = this.getParam("id") || this.list.getFirstId();
 			this.setParam("id", select, true);
-			this.on(this.list, "onAfterSelect", (id) => {
-				this.show(`/top/contacts?id=${id}`);
-			});
 			this.list.select(select);
 		});
 	}
 
 	ready() {
 		this.on(this.list, "onAfterSelect", (id) => {
+			this.show(`/top/contacts?id=${id}`);
 			const contact = contacts.getItem(id);
-			this.$$("infoTitle").parse(contact);
+			this.infoTitle.parse(contact);
 			const statuseId = contact.StatusID;
 			statuses.waitData.then(() => {
 				const statuse = statuses.getItem(statuseId);
 				const {Value: status, Icon: icon} = statuse;
-				this.$$("infoMain").setValues({...contact, Status: status, StatusIcon: icon}, true);
+				this.infoMain.setValues({...contact, Status: status, StatusIcon: icon}, true);
 			});
 		});
 	}

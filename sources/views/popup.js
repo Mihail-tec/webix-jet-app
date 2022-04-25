@@ -91,26 +91,26 @@ export default class Popup extends JetView {
 
 	init() {
 		this.on(this.app, "setDataForm", data => this.setDataForm(data));
+		this.form = this.$$("form");
+		this.addClick = this.$$("addClick");
 	}
 
 	setDataForm(data) {
-		const form = this.$$("form");
-		this.$$("addClick").setValue("Save");
+		this.addClick.setValue("Save");
 		if (data.DueDate) {
 			const dateAndTime = this.strToDate(data.DueDate);
 			data.Date = dateAndTime;
 			data.Time = dateAndTime;
 		}
-		form.clearValidation();
-		form.setValues(data);
+		this.form.clearValidation();
+		this.form.setValues(data);
 	}
 
 	save() {
-		const form = this.$$("form");
-		if (!form.validate()) {
+		if (!this.form.validate()) {
 			return;
 		}
-		const posting = form.getValues();
+		const posting = this.form.getValues();
 		posting.DueDate = this.dateToStr(posting);
 		if (posting.id) {
 			activities.updateItem(posting.id, posting);
@@ -122,11 +122,10 @@ export default class Popup extends JetView {
 	}
 
 	hideWindow() {
-		const form = this.$$("form");
 		this.getParentView().hideWindow();
-		this.$$("addClick").setValue("Add");
-		form.clear();
-		form.clearValidation();
+		this.addClick.setValue("Add");
+		this.form.clear();
+		this.form.clearValidation();
 	}
 
 	dateToStr(posting) {
