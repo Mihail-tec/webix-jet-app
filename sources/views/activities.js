@@ -17,7 +17,6 @@ export default class Activities extends JetView {
 				localId: "datatable",
 				select: "row",
 				minWidth: 700,
-				data: activities,
 				columns: [
 					{
 						id: "State",
@@ -39,11 +38,7 @@ export default class Activities extends JetView {
 						id: "DueDate",
 						header: ["Due data", {content: "datepickerFilter",
 							inputConfig: {format: webix.Date.dateToStr("%Y-%m-%d")},
-							compare(cell, filter) {
-								const dateCell = webix.Date.dayStart(cell).getTime();
-								const dateFilter = webix.Date.dayStart(filter).getTime();
-								return dateCell === dateFilter;
-							}
+							compare: this.dateCompare
 						}],
 						sort: "date",
 						width: 200,
@@ -75,8 +70,8 @@ export default class Activities extends JetView {
 				],
 				onClick: {
 					edit: (e, id) => {
-						const getId = this.table.getItem(id);
-						this.window.showWindow(getId);
+						const data = this.table.getItem(id);
+						this.window.showWindow(data);
 					},
 					delete: (e, id) => {
 						webix.confirm("Are you sure?").then(() => {
@@ -86,7 +81,7 @@ export default class Activities extends JetView {
 				},
 				on: {
 					onAfterSelect: (id) => {
-						this.show(`/top/activities?id=${id}`);
+						this.setParam("id", id, true);
 					}
 				}
 
@@ -127,5 +122,11 @@ export default class Activities extends JetView {
 				this.table.filterByAll();
 			}
 		});
+	}
+
+	dateCompare(cell, filter) {
+		const dateCell = webix.Date.dayStart(cell).getTime();
+		const dateFilter = webix.Date.dayStart(filter).getTime();
+		return dateCell === dateFilter;
 	}
 }

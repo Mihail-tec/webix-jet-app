@@ -19,7 +19,7 @@ export default class Contacts extends JetView {
 						</div>
 						<div class="contact_name"> 
 							<div>${FirstName} ${LastName} </div>
-							<div>${Email} </div>
+							<div>${Email || "no email"} </div>
 						</div>
 					</div>
 				`;
@@ -135,32 +135,32 @@ export default class Contacts extends JetView {
 				<div class="info_items">
 					<div class="info_item">
 						<span class="fas fa-envelope"></span>
-						<span>Email: ${Email}</span>
+						<span>Email: ${Email || "no email"}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fab fa-skype"></span>
-						<span>Skype: ${Skype}</span>
+						<span>Skype: ${Skype || "no skype"}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fas fa-tag"></span>
-						<span>Job: ${Job}</span>
+						<span>Job: ${Job || "no job"}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fas fa-briefcase"></span>
-						<span>Company: ${Company}</span>
+						<span>Company: ${Company || "no company"}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="far fa-calendar-alt"></span>
-						<span>Date of birth: ${Birthday}</span>
+						<span>Date of birth: ${Birthday || "no birthday"}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fas fa-map-marker-alt"></span>
-						<span>Location: ${Address}</span>
+						<span>Location: ${Address || "no address"}</span>
 					</div>
 				</div>
 			</div>

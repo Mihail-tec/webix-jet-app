@@ -22,16 +22,14 @@ export default class Popup extends JetView {
 					name: "TypeID",
 					label: "Type",
 					options: activitiesTypes,
-					required: true,
-					invalidMessage: "Filed required"
+					invalidMessage: "Field required"
 				},
 				{
 					view: "richselect",
 					name: "ContactID",
 					label: "Contact",
 					options: contacts,
-					required: true,
-					invalidMessage: "Filed required"
+					invalidMessage: "Field required"
 				},
 				{
 					cols: [
@@ -102,7 +100,6 @@ export default class Popup extends JetView {
 			data.Date = dateAndTime;
 			data.Time = dateAndTime;
 		}
-		this.form.clearValidation();
 		this.form.setValues(data);
 	}
 

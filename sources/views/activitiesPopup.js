@@ -1,6 +1,6 @@
 import {JetView} from "webix-jet";
 
-import Popup from "./popup";
+import PopupForm from "./popup";
 
 export default class ActivitiesPopup extends JetView {
 	config() {
@@ -10,7 +10,7 @@ export default class ActivitiesPopup extends JetView {
 			localId: "activitiesPopup",
 			position: "center",
 			head: "Add activity",
-			body: Popup
+			body: PopupForm
 		};
 	}
 
