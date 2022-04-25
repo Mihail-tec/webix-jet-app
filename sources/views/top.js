@@ -25,8 +25,8 @@ export default class TopView extends JetView {
 			],
 			on: {
 				onAfterSelect: () => {
-					const value = this.$$("menu").getSelectedItem().value;
-					this.$$("header").setValues({menuName: value});
+					const value = this.menu.getSelectedItem().value;
+					this.header.setValues({menuName: value});
 				}
 			}
 		};
@@ -50,5 +50,7 @@ export default class TopView extends JetView {
 
 	init() {
 		this.use(plugins.Menu, "top:menu");
+		this.header = this.$$("header");
+		this.menu = this.$$("menu");
 	}
 }

@@ -14,6 +14,10 @@ export default class ActivitiesPopup extends JetView {
 		};
 	}
 
+	init() {
+		this.activitiesPopup = this.$$("activitiesPopup");
+	}
+
 	showWindow(data) {
 		if (data) {
 			this.changeHead("Edit");
@@ -23,7 +27,7 @@ export default class ActivitiesPopup extends JetView {
 	}
 
 	changeHead(title = "Add") {
-		this.$$("activitiesPopup").getHead().setHTML(`${title} activity`);
+		this.activitiesPopup.getHead().setHTML(`${title} activity`);
 	}
 
 	hideWindow() {

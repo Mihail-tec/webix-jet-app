@@ -75,7 +75,7 @@ export default class Activities extends JetView {
 				],
 				onClick: {
 					edit: (e, id) => {
-						const getId = this.$$("datatable").getItem(id);
+						const getId = this.table.getItem(id);
 						this.window.showWindow(getId);
 					},
 					delete: (e, id) => {
@@ -119,11 +119,12 @@ export default class Activities extends JetView {
 
 	init() {
 		this.window = this.ui(activitiesPopup);
-		this.$$("datatable").parse(activities);
+		this.table = this.$$("datatable");
+		this.table.parse(activities);
 
 		this.on(activities.data, "onStoreUpdated", (id) => {
 			if (id) {
-				this.$$("datatable").filterByAll();
+				this.table.filterByAll();
 			}
 		});
 	}
