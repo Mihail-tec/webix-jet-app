@@ -122,6 +122,12 @@ export default class Activities extends JetView {
 				this.table.filterByAll();
 			}
 		});
+		const processor = webix.dp(activities);
+		if (processor) {
+			processor.attachEvent("onBeforeDataSend", (details) => {
+				details.data.DueDate = webix.Date.dateToStr("%Y-%m-%d %H:%i")(details.data.DueDate);
+			});
+		}
 	}
 
 	dateCompare(cell, filter) {

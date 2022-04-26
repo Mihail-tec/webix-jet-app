@@ -98,7 +98,7 @@ export default class Contacts extends JetView {
 			const statuseId = contact.StatusID;
 			statuses.waitData.then(() => {
 				const statuse = statuses.getItem(statuseId);
-				const {Value: status, Icon: icon} = statuse;
+				const {Value: status, Icon: icon} = statuse || {Value: "", icon: ""};
 				this.infoMain.setValues({...contact, Status: status, StatusIcon: icon}, true);
 			});
 		});
