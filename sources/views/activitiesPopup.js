@@ -128,8 +128,8 @@ export default class ActivitiesPopup extends JetView {
 		this.getRoot().show();
 		if (id) {
 			this.form.setValues(activities.getItem(id));
-			this.activitiesPopup.getHead().setHTML(id ? "Edit activity" : "Add activity");
-			this.addClick.setValue(id ? "Save" : "Add");
+			this.activitiesPopup.getHead().setHTML("Edit activity");
+			this.addClick.setValue("Save");
 			this.ContactID.disable();
 		}
 	}

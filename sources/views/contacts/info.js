@@ -55,17 +55,17 @@ export default class Info extends JetView {
 	init() {
 		this.infoMain = this.$$("infoMain");
 		this.infoTitle = this.$$("infoTitle");
-		this.Info();
+		this.join();
 	}
 
 	urlChange() {
 		this.id = this.getParam("contactsId", true);
 		if (this.id) {
-			this.Info();
+			this.join();
 		}
 	}
 
-	Info() {
+	join() {
 		webix.promise.all([
 			activities.waitData,
 			contacts.waitData

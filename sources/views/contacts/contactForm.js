@@ -224,10 +224,6 @@ export default class ContactForm extends JetView {
 		if (this.id) {
 			contacts.waitData.then(() => {
 				const contact = contacts.getItem(this.id);
-				if (contact) {
-					this.form.setValues(contact);
-					this.image.setValues({src: contact.Photo});
-				}
 				this.form.setValues(contact);
 				this.image.setValues({src: contact.Photo});
 				this.contactHeader.setHTML("Edit contact");
