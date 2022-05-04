@@ -40,6 +40,7 @@
 
 .info_status {
 	text-align: center;
+	padding: 20px;
 }
 
 .info_photo {
@@ -63,11 +64,13 @@
 .info_item {
 	max-width: 200px;
 	height: 30px;
+	padding-bottom: 15px;
 }
-
 
 .webix_template {
 	padding: 10px 12px;
 }
 
-
+.img {
+	width: 100%;
+}
