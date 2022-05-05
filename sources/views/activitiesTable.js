@@ -42,7 +42,6 @@ export default class ActivityTable extends JetView {
 					{
 						id: "DueDate",
 						header: ["Due data", {content: "datepickerFilter",
-							inputConfig: {format: webix.Date.dateToStr("%Y-%m-%d")},
 							compare: this.dateCompare
 						}],
 						sort: "date",
@@ -90,7 +89,7 @@ export default class ActivityTable extends JetView {
 					},
 					onAfterFilter: () => {
 						if (this.contactId) {
-							this.getRoot().filter("#ContactID#", this.contactId, true);
+							this.table.filter("#ContactID#", this.contactId, true);
 						}
 					}
 				}
@@ -104,10 +103,12 @@ export default class ActivityTable extends JetView {
 		this.window = this.ui(activitiesPopup);
 		this.table = this.$$("datatable");
 		this.table.sync(activities);
-		this.on(activities.data, "onStoreUpdated", (id) => {
-			if (id) {
-				this.table.filterByAll();
-			}
+
+		this.contactId = this.getParam("contactsId", true);
+		this.table.filter("#ContactID#", this.contactId, true);
+
+		this.on(activities.data, "onStoreUpdated", () => {
+			this.table.filterByAll();
 		});
 	}
 
@@ -115,7 +116,7 @@ export default class ActivityTable extends JetView {
 		this.contactId = this.getParam("contactsId", true);
 		if (this.contactId) {
 			this.table.filterByAll();
-			this.table.filter(obj => obj.ContactID === Number(this.contactId));
+			this.table.filter("#ContactID#", this.contactId, true);
 		}
 	}
 

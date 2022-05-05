@@ -234,7 +234,6 @@ export default class ContactForm extends JetView {
 			this.form.clear();
 			this.contactHeader.setHTML("Add new contact");
 			this.actionBtn.setValue("Add");
-			this.image.setValues({src: ""});
 		}
 	}
 
