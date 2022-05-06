@@ -10,7 +10,7 @@ export default class ContactDetailView extends JetView {
 		const tabbar = {
 			view: "tabbar",
 			multiview: true,
-			value: "Activities",
+			value: "activities",
 			options: [
 				{id: "activities", value: "Activities"},
 				{id: "files", value: "Files"}

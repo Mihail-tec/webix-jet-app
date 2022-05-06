@@ -14,6 +14,9 @@ export default class ContactForm extends JetView {
 			view: "form",
 			localId: "contactForm",
 			scroll: true,
+			elementsConfig: {
+				labelWidth: 120
+			},
 			elements: [
 				{
 					margin: 20,
@@ -26,15 +29,13 @@ export default class ContactForm extends JetView {
 									view: "text",
 									label: "First name",
 									name: "FirstName",
-									invalidMessage: "Field required",
-									labelWidth: "auto"
+									invalidMessage: "Field required"
 								},
 								{
 									view: "text",
 									label: "Last name",
 									name: "LastName",
-									invalidMessage: "Field required",
-									labelWidth: "auto"
+									invalidMessage: "Field required"
 								},
 								{
 									view: "datepicker",
@@ -51,27 +52,23 @@ export default class ContactForm extends JetView {
 								{
 									view: "text",
 									label: "Job",
-									name: "Job",
-									labelWidth: "auto"
+									name: "Job"
 								},
 								{
 									view: "text",
 									label: "Company",
-									name: "Company",
-									labelWidth: "auto"
+									name: "Company"
 								},
 								{
 									view: "text",
 									label: "Website",
-									name: "Website",
-									labelWidth: "auto"
+									name: "Website"
 								},
 								{
 									view: "textarea",
 									label: "Address",
 									name: "Address",
-									height: 60,
-									labelWidth: "auto"
+									height: 60
 								}
 							]
 						},
@@ -83,20 +80,17 @@ export default class ContactForm extends JetView {
 									view: "text",
 									label: "Email",
 									name: "Email",
-									invalidMessage: "Invalid email format",
-									labelWidth: "auto"
+									invalidMessage: "Invalid email format"
 								},
 								{
 									view: "text",
 									label: "Skype",
-									name: "Skype",
-									labelWidth: "auto"
+									name: "Skype"
 								},
 								{
 									view: "text",
 									label: "Phone",
 									name: "Phone",
-									labelWidth: "auto",
 									invalidMessage: "Please enter a valid phone number(BY)"
 								},
 								{
@@ -179,10 +173,15 @@ export default class ContactForm extends JetView {
 					value: "Cancel",
 					width: 200,
 					click: () => {
-						webix.confirm("All unsaved data will be lost, are you sure?")
-							.then(() => {
-								this.app.callEvent("select", [this.contactsId]);
-							});
+						if (this.form.isDirty()) {
+							webix.confirm("All unsaved data will be lost, are you sure?")
+								.then(() => {
+									this.app.callEvent("select", [this.contactsId]);
+								});
+						}
+						else {
+							this.app.callEvent("select", [this.contactsId]);
+						}
 					}
 				}
 			]

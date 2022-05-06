@@ -56,14 +56,12 @@ export default class FilesTable extends JetView {
 					file.changeDate = new Date();
 				},
 				onAfterFileAdd: (file) => {
-					try {
-						file.ContactID = this.id;
-						files.add({...file});
-						this.filesTable.filter("#ContactID#", file.ContactID);
-					}
-					catch (error) {
-						webix.message({type: "error", text: error});
-					}
+					file.ContactID = this.id;
+					files.add({...file});
+					this.filesTable.filter("#ContactID#", file.ContactID);
+				},
+				onFileUploadError: (file) => {
+					webix.message({type: "error", text: `Error during file upload ${file}`});
 				}
 			}
 		};
