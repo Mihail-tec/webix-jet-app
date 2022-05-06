@@ -26,9 +26,15 @@ export default class ListView extends JetView {
 				`;
 			},
 			on: {
-				onAfterSelect: (id) => {
-					this.setParam("contactsId", id, true);
-					this.show("contacts.contactDetails");
+				onSelectChange: () => {
+					const id = this.list.getSelectedId();
+					if (id) {
+						this.setParam("contactsId", id, true);
+						this.show("contacts.contactDetails");
+					}
+					else {
+						this.setParam("contactsId", null, true);
+					}
 				}
 			}
 		};
@@ -39,6 +45,7 @@ export default class ListView extends JetView {
 			type: "icon",
 			icon: "fas fa-plus-square",
 			click: () => {
+				this.list.unselectAll();
 				this.show("contacts.contactForm");
 			}
 
@@ -54,16 +61,23 @@ export default class ListView extends JetView {
 
 	init() {
 		this.list = this.$$("list");
-		this.show("");
 		this.on(this.app, "select", (id) => {
 			this.list.unselectAll();
 			if (id) {
 				this.list.select(id);
 			}
 			else {
-				this.list.select(this.list.getFirstId());
+				const firstId = this.list.getFirstId();
+				if (firstId) {
+					this.list.select(firstId);
+				}
+				else {
+					webix.alert("Click button 'Add contact' ");
+					this.show("/top/contacts/contacts.empty");
+				}
 			}
 		});
+
 
 		webix.promise.all([
 			contacts.waitData,

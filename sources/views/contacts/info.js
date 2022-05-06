@@ -16,7 +16,7 @@ export default class Info extends JetView {
 							view: "template",
 							autoheight: true,
 							padding: 10,
-							template: ({FirstName, LastName}) => `${FirstName} ${LastName}`
+							template: ({FirstName, LastName}) => `${FirstName || "no FirstName"} ${LastName || "no LastName"}`
 						},
 						{},
 						{
@@ -34,7 +34,7 @@ export default class Info extends JetView {
 							type: "icon",
 							icon: "far fa-edit",
 							click: () => {
-								this.show(`contacts.contactForm?id=${this.id}`);
+								this.show("contacts.contactForm");
 							}
 						}
 					]
@@ -55,12 +55,11 @@ export default class Info extends JetView {
 	init() {
 		this.infoMain = this.$$("infoMain");
 		this.infoTitle = this.$$("infoTitle");
-		this.showDataContact();
 	}
 
 	urlChange() {
-		this.id = this.getParam("contactsId", true);
-		if (this.id) {
+		this.contactsId = this.getParam("contactsId", true);
+		if (this.contactsId) {
 			this.showDataContact();
 		}
 	}
@@ -71,7 +70,7 @@ export default class Info extends JetView {
 			contacts.waitData
 		])
 			.then(() => {
-				const contact = contacts.getItem(this.id);
+				const contact = contacts.getItem(this.contactsId);
 				if (contact) {
 					this.infoMain.parse(contact);
 					this.infoTitle.parse(contact);
@@ -80,8 +79,13 @@ export default class Info extends JetView {
 	}
 
 	delete() {
-		this.webix.confirm("Are you sure?").then(() => {
-			contacts.remove(this.id);
+		this.webix.confirm("Are you sure you want to delete?").then(() => {
+			contacts.remove(this.contactsId);
+			activities.data.each((obj) => {
+				if (Number(obj.ContactID) === Number(this.contactsId)) {
+					activities.remove(obj.id);
+				}
+			});
 			this.app.callEvent("select");
 		});
 	}

@@ -11,8 +11,7 @@ export default class Contacts extends JetView {
 			cols: [
 				ListView,
 				{
-					animate: false,
-					cells: [{$subview: true}]
+					$subview: true
 				}
 			]
 		};

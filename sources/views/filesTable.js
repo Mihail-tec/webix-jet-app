@@ -19,9 +19,7 @@ export default class FilesTable extends JetView {
 					header: "Change date",
 					sort: "date",
 					width: 200,
-					template({date}) {
-						return webix.Date.dateToStr("%d %M %Y %H:%i")(date);
-					}
+					format: webix.Date.dateToStr("%d %M %Y %H:%i")
 				},
 				{
 					id: "size",
@@ -37,7 +35,7 @@ export default class FilesTable extends JetView {
 			],
 			onClick: {
 				delete: (e, id) => {
-					webix.confirm("Are you sure?").then(() => {
+					webix.confirm("Are you sure you want to delete?").then(() => {
 						files.remove(id);
 						this.filesTable.filter("#ContactID#", this.id);
 					});
@@ -55,12 +53,17 @@ export default class FilesTable extends JetView {
 			align: "center",
 			on: {
 				onBeforeFileAdd: (file) => {
-					file.date = new Date();
+					file.changeDate = new Date();
 				},
 				onAfterFileAdd: (file) => {
-					file.ContactID = this.id;
-					files.add({...file});
-					this.filesTable.filter("#ContactID#", file.ContactID);
+					try {
+						file.ContactID = this.id;
+						files.add({...file});
+						this.filesTable.filter("#ContactID#", file.ContactID);
+					}
+					catch (error) {
+						webix.message({type: "error", text: error});
+					}
 				}
 			}
 		};

@@ -22,7 +22,6 @@ export default class ActivityTable extends JetView {
 				view: "datatable",
 				localId: "datatable",
 				select: "row",
-				minWidth: 700,
 				columns: [
 					{
 						id: "State",
@@ -52,7 +51,8 @@ export default class ActivityTable extends JetView {
 						id: "Details",
 						header: ["Details", {content: "textFilter"}],
 						sort: "text",
-						fillspace: true
+						fillspace: true,
+						minWidth: 200
 					},
 					{
 						id: "ContactID",
@@ -78,7 +78,7 @@ export default class ActivityTable extends JetView {
 						this.window.showWindow(id);
 					},
 					delete: (e, id) => {
-						webix.confirm("Are you sure?").then(() => {
+						webix.confirm("Are you sure you want to delete?").then(() => {
 							activities.remove(id);
 						});
 					}
@@ -103,9 +103,6 @@ export default class ActivityTable extends JetView {
 		this.window = this.ui(activitiesPopup);
 		this.table = this.$$("datatable");
 		this.table.sync(activities);
-
-		this.contactId = this.getParam("contactsId", true);
-		this.table.filter("#ContactID#", this.contactId, true);
 
 		this.on(activities.data, "onStoreUpdated", () => {
 			this.table.filterByAll();

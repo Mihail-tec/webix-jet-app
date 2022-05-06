@@ -6,18 +6,20 @@ import statuses from "../../models/statusesDB";
 export default class ContactForm extends JetView {
 	config() {
 		const contactHeader = {
-			template: "Header",
+			template: "Add new contact",
 			localId: "contactHeader",
 			type: "header"
 		};
 		const contactForm = {
 			view: "form",
 			localId: "contactForm",
+			scroll: true,
 			elements: [
 				{
 					margin: 20,
 					cols: [
 						{
+							minWidth: 200,
 							margin: 20,
 							rows: [
 								{
@@ -25,16 +27,14 @@ export default class ContactForm extends JetView {
 									label: "First name",
 									name: "FirstName",
 									invalidMessage: "Field required",
-									labelWidth: "auto",
-									bottomLabel: "*name must start with a capital letter"
+									labelWidth: "auto"
 								},
 								{
 									view: "text",
 									label: "Last name",
 									name: "LastName",
 									invalidMessage: "Field required",
-									labelWidth: "auto",
-									bottomLabel: "*name must start with a capital letter"
+									labelWidth: "auto"
 								},
 								{
 									view: "datepicker",
@@ -76,6 +76,7 @@ export default class ContactForm extends JetView {
 							]
 						},
 						{
+							minWidth: 200,
 							margin: 20,
 							rows: [
 								{
@@ -96,7 +97,6 @@ export default class ContactForm extends JetView {
 									label: "Phone",
 									name: "Phone",
 									labelWidth: "auto",
-									bottomLabel: "*phone number must be 12 digits and start with '+'",
 									invalidMessage: "Please enter a valid phone number(BY)"
 								},
 								{
@@ -116,104 +116,84 @@ export default class ContactForm extends JetView {
 											name: "Photo",
 											width: 200
 										},
-										{},
-										{
-											rows: [
-												{},
-												{
-													view: "uploader",
-													value: "Change photo",
-													autosend: false,
-													multiple: false,
-													accept: "image/jpeg, image/png",
-													on: {
-														onAfterFileAdd: (upload) => {
-															this.uploadFile(upload);
-														}
-													}
-												},
-												{
-													view: "button",
-													value: "Delete photo",
-													click: () => {
-														this.webix.confirm("Are you sure?")
-															.then(() => {
-																this.image.setValues({src: ""});
-															});
-													}
-												}
-											]
-										}
+										{}
 									]
 								}
 							]
 						}
 					]
 				},
-				{},
 				{
-					margin: 20,
-					borderless: true,
 					cols: [
 						{},
 						{
-							view: "button",
-							value: "value",
-							localId: "actionBtn",
+							view: "uploader",
+							value: "Change photo",
+							autosend: false,
+							multiple: false,
+							accept: "image/jpeg, image/png",
 							width: 200,
-							css: "webix_primary",
-							click: () => this.save()
+							on: {
+								onAfterFileAdd: (upload) => {
+									this.uploadFile(upload);
+								}
+							}
 						},
 						{
 							view: "button",
-							value: "Cancel",
+							value: "Delete photo",
 							width: 200,
 							click: () => {
-								this.app.callEvent("select", [this.id]);
+								this.webix.confirm("Are you sure you want to delete?")
+									.then(() => {
+										this.image.setValues({src: ""});
+									});
 							}
 						}
 					]
 				}
 			],
 			rules: {
-				FirstName: (value) => {
-					const valid = /^[A-ЯЁ][а-яё]{2,20}|[A-Z][a-z]{2,20}$/.test(value);
-					if (valid) {
-						return true;
-					}
-					return false;
-				},
-				LastName: (value) => {
-					const valid = /^[A-ЯЁ][а-яё]{2,40}|[A-Z][a-z]{2,40}$/.test(value);
-					if (valid) {
-						return true;
-					}
-					return false;
-				},
-				Email: (value) => {
-					const valid = /^[A-Za-zА-яа-я0-9._%+-]+@[a-z0-9.]+.[a-z]{2,4}$/.test(value);
-					if (valid) {
-						return true;
-					}
-					return false;
-				},
-				Phone: (value) => {
-					const valid = /^\+\d{12,}$/.test(value);
-					if (valid) {
-						return true;
-					}
-					return false;
-				}
+				FirstName: webix.rules.isNotEmpty,
+				LastName: webix.rules.isNotEmpty,
+				Email: webix.rules.isEmail,
+				Phone: webix.rules.isNumber
 			}
 		};
 
+		const btns = {
+			margin: 20,
+			borderless: true,
+			cols: [
+				{},
+				{
+					view: "button",
+					value: "Add",
+					localId: "actionBtn",
+					width: 200,
+					css: "webix_primary",
+					click: () => this.save()
+				},
+				{
+					view: "button",
+					value: "Cancel",
+					width: 200,
+					click: () => {
+						webix.confirm("All unsaved data will be lost, are you sure?")
+							.then(() => {
+								this.app.callEvent("select", [this.contactsId]);
+							});
+					}
+				}
+			]
+		};
+
 		return {
-			rows: [contactHeader, contactForm]
+			rows: [contactHeader, contactForm, btns]
 		};
 	}
 
 	init() {
-		this.id = this.getParam("id", true);
 		this.form = this.$$("contactForm");
 		this.image = this.$$("image");
 		this.contactHeader = this.$$("contactHeader");
@@ -221,9 +201,10 @@ export default class ContactForm extends JetView {
 	}
 
 	urlChange() {
-		if (this.id) {
+		this.contactsId = this.getParam("contactsId", true);
+		if (this.contactsId) {
 			contacts.waitData.then(() => {
-				const contact = contacts.getItem(this.id);
+				const contact = contacts.getItem(this.contactsId);
 				this.form.setValues(contact);
 				this.image.setValues({src: contact.Photo});
 				this.contactHeader.setHTML("Edit contact");
@@ -244,8 +225,10 @@ export default class ContactForm extends JetView {
 			formValues.Photo = this.image.getValues().src;
 			formValues.Birthday = dateFormat(formValues.Birthday);
 			formValues.StartDate = dateFormat(formValues.StartDate);
-			if (contacts.exists(formValues.id)) {
+
+			if (this.contactsId) {
 				contacts.updateItem(formValues.id, formValues);
+				this.app.callEvent("select", [this.contactsId]);
 			}
 			else {
 				contacts.waitSave(() => {
@@ -254,7 +237,6 @@ export default class ContactForm extends JetView {
 					this.app.callEvent("select", [obj.id]);
 				});
 			}
-			this.form.clear();
 		}
 	}
 

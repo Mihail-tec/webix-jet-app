@@ -25,7 +25,7 @@ export default class ContactDetailView extends JetView {
 			icon: "fas fa-plus-square",
 			width: 200,
 			click: () => {
-				this.window.showWindow(this.id);
+				this.window.showWindow();
 			}
 		};
 
@@ -52,6 +52,5 @@ export default class ContactDetailView extends JetView {
 
 	init() {
 		this.window = this.ui(activitiesPopup);
-		this.id = this.getParam("id", true);
 	}
 }
