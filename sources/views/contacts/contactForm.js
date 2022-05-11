@@ -5,8 +5,9 @@ import statuses from "../../models/statusesDB";
 
 export default class ContactForm extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const contactHeader = {
-			template: "Add new contact",
+			template: _("Add new contact"),
 			localId: "contactHeader",
 			type: "header"
 		};
@@ -27,46 +28,46 @@ export default class ContactForm extends JetView {
 							rows: [
 								{
 									view: "text",
-									label: "First name",
+									label: _("First name"),
 									name: "FirstName",
-									invalidMessage: "Field required"
+									invalidMessage: _("Field required")
 								},
 								{
 									view: "text",
-									label: "Last name",
+									label: _("Last name"),
 									name: "LastName",
-									invalidMessage: "Field required"
+									invalidMessage: _("Field required")
 								},
 								{
 									view: "datepicker",
-									label: "Joing date",
+									label: _("Joing date"),
 									name: "StartDate",
 									format: "%d %m %Y"
 								},
 								{
 									view: "richselect",
-									label: "Status",
+									label: _("Status"),
 									name: "StatusID",
 									options: statuses
 								},
 								{
 									view: "text",
-									label: "Job",
+									label: _("Job"),
 									name: "Job"
 								},
 								{
 									view: "text",
-									label: "Company",
+									label: _("Company"),
 									name: "Company"
 								},
 								{
 									view: "text",
-									label: "Website",
+									label: _("Website"),
 									name: "Website"
 								},
 								{
 									view: "textarea",
-									label: "Address",
+									label: _("Address"),
 									name: "Address",
 									height: 60
 								}
@@ -78,24 +79,24 @@ export default class ContactForm extends JetView {
 							rows: [
 								{
 									view: "text",
-									label: "Email",
+									label: _("Email"),
 									name: "Email",
-									invalidMessage: "Invalid email format"
+									invalidMessage: _("Invalid email format")
 								},
 								{
 									view: "text",
-									label: "Skype",
+									label: _("Skype"),
 									name: "Skype"
 								},
 								{
 									view: "text",
-									label: "Phone",
+									label: _("Phone"),
 									name: "Phone",
-									invalidMessage: "Please enter a valid phone number(BY)"
+									invalidMessage: _("Please enter a valid phone number(BY)")
 								},
 								{
 									view: "datepicker",
-									label: "Birthday",
+									label: _("Birthday"),
 									name: "Birthday",
 									format: "%d %m %Y"
 								},
@@ -122,7 +123,7 @@ export default class ContactForm extends JetView {
 						{},
 						{
 							view: "uploader",
-							value: "Change photo",
+							value: _("Change photo"),
 							autosend: false,
 							multiple: false,
 							accept: "image/jpeg, image/png",
@@ -135,10 +136,10 @@ export default class ContactForm extends JetView {
 						},
 						{
 							view: "button",
-							value: "Delete photo",
+							value: _("Delete photo"),
 							width: 200,
 							click: () => {
-								this.webix.confirm("Are you sure you want to delete?")
+								this.webix.confirm(_("Are you sure you want to delete?"))
 									.then(() => {
 										this.image.setValues({src: ""});
 									});
@@ -162,7 +163,7 @@ export default class ContactForm extends JetView {
 				{},
 				{
 					view: "button",
-					value: "Add",
+					value: _("Add"),
 					localId: "actionBtn",
 					width: 200,
 					css: "webix_primary",
@@ -170,11 +171,11 @@ export default class ContactForm extends JetView {
 				},
 				{
 					view: "button",
-					value: "Cancel",
+					value: _("Cancel"),
 					width: 200,
 					click: () => {
 						if (this.form.isDirty()) {
-							webix.confirm("All unsaved data will be lost, are you sure?")
+							webix.confirm(_("All unsaved data will be lost, are you sure?"))
 								.then(() => {
 									this.app.callEvent("select", [this.contactsId]);
 								});
@@ -200,20 +201,21 @@ export default class ContactForm extends JetView {
 	}
 
 	urlChange() {
+		const _ = this.app.getService("locale")._;
 		this.contactsId = this.getParam("contactsId", true);
 		if (this.contactsId) {
 			contacts.waitData.then(() => {
 				const contact = contacts.getItem(this.contactsId);
 				this.form.setValues(contact);
 				this.image.setValues({src: contact.Photo});
-				this.contactHeader.setHTML("Edit contact");
-				this.actionBtn.setValue("Save");
+				this.contactHeader.setHTML(_("Edit contact"));
+				this.actionBtn.setValue(_("Save"));
 			});
 		}
 		else {
 			this.form.clear();
-			this.contactHeader.setHTML("Add new contact");
-			this.actionBtn.setValue("Add");
+			this.contactHeader.setHTML(_("Add new contact"));
+			this.actionBtn.setValue(_("Add"));
 		}
 	}
 

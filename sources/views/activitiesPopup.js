@@ -6,12 +6,13 @@ import contacts from "../models/contactsDB";
 
 export default class ActivitiesPopup extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		return {
 			view: "window",
 			modal: true,
 			localId: "activitiesPopup",
 			position: "center",
-			head: "Add activity",
+			head: _("Add activity"),
 			body: {
 				view: "form",
 				localId: "form",
@@ -19,37 +20,37 @@ export default class ActivitiesPopup extends JetView {
 					{
 						view: "textarea",
 						name: "Details",
-						label: "Details",
+						label: _("Details"),
 						width: 600,
 						height: 100
 					},
 					{
 						view: "richselect",
 						name: "TypeID",
-						label: "Type",
+						label: _("Type"),
 						options: activitiesTypes,
-						invalidMessage: "Field required"
+						invalidMessage: _("Field required")
 					},
 					{
 						view: "richselect",
 						name: "ContactID",
 						localId: "ContactID",
-						label: "Contact",
+						label: _("Contact"),
 						options: contacts,
-						invalidMessage: "Field required"
+						invalidMessage: _("Field required")
 					},
 					{
 						cols: [
 							{
 								view: "datepicker",
-								label: "Date",
+								label: _("Date"),
 								name: "Date",
 								width: 250
 							},
 							{
 								view: "datepicker",
 								type: "time",
-								label: "Time",
+								label: _("Time"),
 								name: "Time",
 								width: 250,
 								suggest: {
@@ -64,7 +65,7 @@ export default class ActivitiesPopup extends JetView {
 					{
 						view: "checkbox",
 						name: "State",
-						labelRight: "Completed",
+						labelRight: _("Completed"),
 						labelWidth: 0,
 						checkValue: "Close",
 						uncheckValue: "Open"
@@ -74,14 +75,14 @@ export default class ActivitiesPopup extends JetView {
 							{},
 							{
 								view: "button",
-								value: "Add",
+								value: _("Add"),
 								localId: "addClick",
 								css: "webix_primary",
 								click: () => this.save()
 							},
 							{
 								view: "button",
-								value: "Cancel",
+								value: _("Cancel"),
 								click: () => this.hideWindow()
 							}
 						]
@@ -125,6 +126,7 @@ export default class ActivitiesPopup extends JetView {
 	}
 
 	showWindow(id) {
+		const _ = this.app.getService("locale")._;
 		this.getRoot().show();
 		const contactId = this.getParam("contactsId", true);
 
@@ -134,8 +136,8 @@ export default class ActivitiesPopup extends JetView {
 		}
 		if (id) {
 			this.form.setValues(activities.getItem(id));
-			this.activitiesPopup.getHead().setHTML("Edit activity");
-			this.addClick.setValue("Save");
+			this.activitiesPopup.getHead().setHTML(_("Edit activity"));
+			this.addClick.setValue(_("Save"));
 			this.ContactID.disable();
 		}
 	}

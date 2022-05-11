@@ -5,6 +5,8 @@ const activities = new webix.DataCollection({
 		$change: (obj) => {
 			const parser = webix.Date.strToDate("%Y-%m-%d %H:%i");
 			obj.DueDate = parser(obj.DueDate);
+			obj.Date = new Date(obj.DueDate);
+			obj.Time = new Date(obj.DueDate);
 		},
 		$save: (data) => {
 			data.DueDate = webix.Date.dateToStr("%Y-%m-%d %H:%i")(data.DueDate);

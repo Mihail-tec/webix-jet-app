@@ -4,26 +4,27 @@ import files from "../models/filesDB";
 
 export default class FilesTable extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const filesTable = {
 			view: "datatable",
 			localId: "filesTable",
 			columns: [
 				{
 					id: "name",
-					header: "Name",
+					header: _("Name"),
 					sort: "text",
 					fillspace: true
 				},
 				{
 					id: "changeDate",
-					header: "Change date",
+					header: _("Change date"),
 					sort: "date",
 					width: 200,
 					format: webix.Date.dateToStr("%d %M %Y %H:%i")
 				},
 				{
 					id: "size",
-					header: "Size",
+					header: _("Size"),
 					sort: "int",
 					template: "#sizetext#"
 				},
@@ -35,7 +36,7 @@ export default class FilesTable extends JetView {
 			],
 			onClick: {
 				delete: (e, id) => {
-					webix.confirm("Are you sure you want to delete?").then(() => {
+					webix.confirm(_("Are you sure you want to delete?")).then(() => {
 						files.remove(id);
 						this.filesTable.filter("#ContactID#", this.id);
 					});
@@ -46,7 +47,7 @@ export default class FilesTable extends JetView {
 		const uploadFile = {
 			view: "uploader",
 			localId: "uploder",
-			value: "Upload file",
+			value: _("Upload file"),
 			upload: "files",
 			autosend: false,
 			width: 500,
@@ -61,7 +62,7 @@ export default class FilesTable extends JetView {
 					this.filesTable.filter("#ContactID#", file.ContactID);
 				},
 				onFileUploadError: (file) => {
-					webix.message({type: "error", text: `Error during file upload ${file}`});
+					webix.message({type: "error", text: `${_("Error during file upload")} ${file}`});
 				}
 			}
 		};
