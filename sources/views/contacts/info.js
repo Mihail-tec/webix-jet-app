@@ -6,6 +6,7 @@ import statuses from "../../models/statusesDB";
 
 export default class Info extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const contactInfo = {
 			localId: "contactsDetails",
 			rows: [
@@ -16,21 +17,21 @@ export default class Info extends JetView {
 							view: "template",
 							autoheight: true,
 							padding: 10,
-							template: ({FirstName, LastName}) => `${FirstName || "no FirstName"} ${LastName || "no LastName"}`
+							template: ({FirstName, LastName}) => `${FirstName || _("no FirstName")} ${LastName || _("no LastName")}`
 						},
 						{},
 						{
 							view: "button",
-							label: "Delete",
-							width: 100,
+							label: _("Delete"),
+							width: 200,
 							type: "icon",
 							icon: "far fa-trash-alt",
 							click: () => this.delete()
 						},
 						{
 							view: "button",
-							label: "Edit",
-							width: 100,
+							label: _("Edit"),
+							width: 200,
 							type: "icon",
 							icon: "far fa-edit",
 							click: () => {
@@ -79,7 +80,8 @@ export default class Info extends JetView {
 	}
 
 	delete() {
-		this.webix.confirm("Are you sure you want to delete?").then(() => {
+		const _ = this.app.getService("locale")._;
+		this.webix.confirm(_("Are you sure you want to delete?")).then(() => {
 			contacts.remove(this.contactsId);
 			activities.data.each((obj) => {
 				if (Number(obj.ContactID) === Number(this.contactsId)) {
@@ -91,6 +93,7 @@ export default class Info extends JetView {
 	}
 
 	infoTemplate() {
+		const _ = this.app.getService("locale")._;
 		const infoTemplate = ({
 			Photo,
 			Email,
@@ -112,9 +115,9 @@ export default class Info extends JetView {
 
 					<div class="info_status">
 						<span class="status-name">
-						${status ? `${status.Icon}` : "no status"}
+						${status ? `${status.Icon}` : _("no status")}
 						</span>
-						<span class='fas fa-${status ? `${status.Value}` : "no status"}'></span>
+						<span class='fas fa-${status ? `${status.Value}` : _("no status")}'></span>
 					</div>
 				</div>
 
@@ -122,32 +125,32 @@ export default class Info extends JetView {
 				<div class="info_items">
 					<div class="info_item">
 						<span class="fas fa-envelope"></span>
-						<span>Email: ${Email || "no email"}</span>
+						<span>${_("Email")}: ${Email || _("no email")}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fab fa-skype"></span>
-						<span>Skype: ${Skype || "no skype"}</span>
+						<span>${_("Skype")}: ${Skype || _("no skype")}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fas fa-tag"></span>
-						<span>Job: ${Job || "no job"}</span>
+						<span>${_("Job")}: ${Job || _("no job")}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fas fa-briefcase"></span>
-						<span>Company: ${Company || "no company"}</span>
+						<span>${_("Company")}: ${Company || _("no company")}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="far fa-calendar-alt"></span>
-						<span>Date of birth: ${webix.Date.dateToStr("%d %M %Y")(Birthday) || "no birthday"}</span>
+						<span>${_("Date of birth")}: ${webix.Date.dateToStr("%d %M %Y")(Birthday) || _("no birthday")}</span>
 					</div>
 
 					<div class="info_item">
 						<span class="fas fa-map-marker-alt"></span>
-						<span>Location: ${Address || "no address"}</span>
+						<span>${_("Location")}: ${Address || _("no address")}</span>
 					</div>
 				</div>
 			</div>

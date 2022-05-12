@@ -7,20 +7,21 @@ import Info from "./info";
 
 export default class ContactDetailView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const tabbar = {
 			view: "tabbar",
 			multiview: true,
 			value: "activities",
 			options: [
-				{id: "activities", value: "Activities"},
-				{id: "files", value: "Files"}
+				{id: "activities", value: _("Activities")},
+				{id: "files", value: _("Files")}
 			]
 		};
 
-		const activitiesTable = new ActivitiesTable(this.app, true);
+		const activitiesTable = new ActivitiesTable(this.app, true, true);
 		const addBtnAct = {
 			view: "button",
-			label: "Add activity",
+			label: _("Add activity"),
 			type: "icon",
 			icon: "fas fa-plus-square",
 			width: 200,

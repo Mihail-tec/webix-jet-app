@@ -5,9 +5,10 @@ import activitiesTable from "./activitiesTable";
 
 export default class Activities extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const addBtn = {
 			view: "button",
-			label: "Add activity",
+			label: _("Add activity"),
 			type: "icon",
 			icon: "fas fa-plus-square",
 			width: 200,
