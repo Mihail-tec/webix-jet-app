@@ -46,7 +46,7 @@ export default class SettingsDatatable extends JetView {
 				delete: (e, id) => {
 					webix.confirm(_("Are you sure you want to delete?")).then(() => {
 						this.data.remove(id);
-						this.clr();
+						this.clearField();
 					});
 				}
 			}
@@ -84,7 +84,7 @@ export default class SettingsDatatable extends JetView {
 						{
 							view: "button",
 							value: _("Cancel"),
-							click: () => this.clr()
+							click: () => this.clearField()
 						}
 					]
 				}
@@ -111,7 +111,6 @@ export default class SettingsDatatable extends JetView {
 
 	save() {
 		const formValues = this.form.getValues();
-		formValues.value = formValues.Value;
 		if (!this.form.validate()) {
 			return;
 		}
@@ -123,10 +122,10 @@ export default class SettingsDatatable extends JetView {
 			this.data.add(formValues);
 		}
 
-		this.clr();
+		this.clearField();
 	}
 
-	clr() {
+	clearField() {
 		const _ = this.app.getService("locale")._;
 		this.form.clear();
 		this.form.clearValidation();

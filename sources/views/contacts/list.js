@@ -76,6 +76,7 @@ export default class ListView extends JetView {
 		this.filterContacts = this.$$("filterContacts");
 		this.on(this.app, "select", (id) => {
 			this.list.unselectAll();
+			this.filterList();
 			if (id) {
 				this.list.select(id);
 			}
@@ -89,7 +90,6 @@ export default class ListView extends JetView {
 					this.show("/top/contacts/contacts.empty");
 				}
 			}
-			this.filterList();
 		});
 
 		webix.promise
@@ -101,33 +101,32 @@ export default class ListView extends JetView {
 	}
 
 	filterList() {
-		const value = this.filterContacts.getValue().toLowerCase().trim();
-		const key = [
-			"FirstName",
-			"LastName",
-			"Email",
-			"Company",
-			"Job",
-			"Address",
-			"Skype",
-			"Website"
-		];
-		this.list.filter((obj) => {
-			const result = key.some(el => obj[el].toLowerCase().indexOf(value) !== -1);
-			if (result) {
-				return true;
-			}
-			if (obj.Phone === value) {
-				return true;
-			}
+		const text = this.filterContacts.getValue().toLowerCase().trim();
 
-			if (obj.StatusID) {
-				const status = statuses.getItem(obj.StatusID);
-				if (status) {
-					return status.Value.toLowerCase().indexOf(value) !== -1;
+		if (text != null && typeof text !== "undefined") {
+			this.list.filter((obj) => {
+				const isFound = Object.entries(obj)
+					.filter(([key, value]) => (key !== "Phone" || key !== "StatusID") && typeof value === "string")
+					.find(([, value]) => value.toLowerCase().indexOf(text) !== -1);
+				if (isFound) {
+					return true;
 				}
-			}
-			return false;
-		});
+				if (obj.Phone === text) {
+					return true;
+				}
+
+				if (obj.StatusID) {
+					const status = statuses.getItem(obj.StatusID);
+					if (status) {
+						return status.Value.toLowerCase().indexOf(text) !== -1;
+					}
+				}
+				return false;
+			});
+		}
+		else {
+			this.list.filter();
+		}
 	}
 }
+

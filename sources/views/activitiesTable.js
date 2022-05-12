@@ -37,7 +37,7 @@ export default class ActivityTable extends JetView {
 				on: {
 					onChange: (id) => {
 						this.table.filterByAll();
-						this.changeTabbar(id);
+						this.filterTabbar(id);
 					}
 				}
 			};
@@ -115,10 +115,7 @@ export default class ActivityTable extends JetView {
 						if (this.contactId) {
 							this.table.filter("#ContactID#", this.contactId, true);
 						}
-						this.changeTabbar(this.tabbar.getValue());
-					},
-					onCheck: () => {
-						this.changeTabbar(this.tabbar.getValue());
+						this.filterTabbar(this.tabbar.getValue());
 					}
 				}
 			};
@@ -162,44 +159,41 @@ export default class ActivityTable extends JetView {
 		start.getMonth() === end.getMonth();
 	}
 
-	changeTabbar(id) {
-		const filterTabbar = (obj) => {
-			const todayDateTime = Date.now();
-			const todayDate = webix.Date.dayStart(Date.now());
+	filterTabbar(id) {
+		const todayDateTime = Date.now();
+		const todayDate = webix.Date.dayStart(Date.now());
 
-			if (id === "overdue") {
+		const filters = {
+			overdue: (obj) => {
 				if (!obj.DueDate) return false;
 				return obj.State === "Open" && obj.DueDate.getTime() < todayDateTime;
-			}
-			if (id === "completed") {
-				return obj.State === "Close";
-			}
-			if (id === "today") {
+			},
+			completed: obj => obj.State === "Close",
+			today: (obj) => {
 				if (!obj.DueDate) return false;
 				const date = webix.Date.dayStart(obj.DueDate);
 				return webix.Date.equal(date, todayDate);
-			}
-			if (id === "tomorrow") {
+			},
+			tomorrow: (obj) => {
 				if (!obj.DueDate) return false;
 				const date = webix.Date.dayStart(obj.DueDate);
 				const oneDay = webix.Date.add(todayDate, 1, "day", true);
 				const tomorrow = webix.Date.dayStart(oneDay);
 				return webix.Date.equal(date, tomorrow);
-			}
-			if (id === "thisWeek") {
+			},
+			thisWeek: (obj) => {
 				if (!obj.DueDate) return false;
 				const dateWeek = webix.Date.weekStart(todayDate);
 				const monday = webix.Date.add(dateWeek, 1, "day", true);
 				const sunday = webix.Date.add(dateWeek, 7, "day", true);
 				return monday <= obj.DueDate && obj.DueDate <= sunday;
-			}
-			if (id === "thisMonth") {
+			},
+			thisMonth: (obj) => {
 				if (!obj.DueDate) return false;
 				return this.thisMonth(todayDate, obj.DueDate);
 			}
-
-			return obj;
 		};
-		this.table.filter(obj => filterTabbar(obj), "", true);
+
+		this.table.filter(filters[id], "", true);
 	}
 }
